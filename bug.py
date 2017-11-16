@@ -73,7 +73,7 @@ U_prev = Function(V)
 
 T = 2.0
 t = 0
-dt_val = 0.2
+dt_val = 0.1
 dt = Constant(dt_val)
 # 20 time steps error
 D = DiffCoeff(degree=1)
@@ -124,7 +124,7 @@ while t <= T:
     if write_observations:
         observations.write(U, str(t))
     else:
-        try : # Only read some observations
+        try :
             observations.read(obs_func, str(t))
             J += assemble((U - obs_func) ** 2 * dx)
         except :
