@@ -128,7 +128,7 @@ while t <= T:
             observations.read(obs_func, str(t))
             J += assemble((U - obs_func) ** 2 * dx)
         except :
-            print "Error"
+            print("Error")
 if write_observations:
     exit()
 
@@ -140,29 +140,21 @@ Jhat = ReducedFunctional(J, ctrls)
 
 # exit()
 m = [Constant(1000), Constant(2), Constant(2)]
-U.vector()[:] = 0
-U_prev.vector()[:] = 0
 
-for i in range(10):
-    # Evaluate forward model at new control values
-    j = Jhat(m)
-    print("Functional value at iteration {}: {}".format(i, j))
+j = Jhat(m)
+print("Functional value at the start: {}".format(j))
 
-    # Compute gradient
-    dJdm = compute_gradient(J, ctrls)
+m = minimize(Jhat)
 
-    # Update control values:
-    alpha = 0.1
-    m = [Constant(m[0] - alpha * dJdm[0]),
-         Constant(m[1] - alpha * dJdm[1]),
-         Constant(m[2] - alpha * dJdm[2])]
-    print([float(mm) for mm in m])
+j = Jhat(m)
+print("Functional value after optimization: {}".format(j))
+
 
 #exit()
 print("Running Taylor test")
 
 from IPython import embed;
 
-embed()
+#embed()
 h = [Constant(10), Constant(1), Constant(1)]
 taylor_test_multiple(Jhat, m, h)
